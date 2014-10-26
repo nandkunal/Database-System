@@ -23,21 +23,21 @@ public class TestDBSystem {
 		dbSystem.displayDataBaseMetaData();
 	}
 	
-	@Test
+	//@Test
 	public void testinsertRecord()
 	{  
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
-		dbSystem.insertRecord("countries","302614,India,NA");
+		dbSystem.insertRecord("testcountries","302614,IN,INDIA,AS");
 		dbSystem.flushPages();
 	}
 	
-	//@Test
+	@Test
 	public void testgetRecord(){
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
-		System.out.println(dbSystem.getRecord("countries",0));
-		System.out.println(dbSystem.getRecord("countries",1));
+		//System.out.println(dbSystem.getRecord("countries",0));
+		System.out.println(dbSystem.getRecord("countries",44));
 	}
 	@After
 	public void tearDown(){

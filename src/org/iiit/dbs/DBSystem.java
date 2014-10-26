@@ -318,6 +318,16 @@ public class DBSystem {
           
           System.out.println("MISS "+availablePage);
           List <Page> table=dbMetaData.get(tableName);
+          /*
+           * Logic to find if RecordId exists in Last Page
+           */
+          
+          Page lastPage = table.get(table.size()-1);
+          if(lastPage.endRecord<recordId){
+        	  return "No Record Found";
+          }
+          
+          
           /* get start record ,end record and offset from dbInfo for reading the only that page from file*/
           for(i=0;i<table.size();i++)
           {

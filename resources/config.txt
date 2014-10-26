@@ -2,6 +2,11 @@ PAGE_SIZE 100
 NUM_PAGES 4
 PATH_FOR_DATA resources/db
 BEGIN
+testcountries
+ID, int
+CODE, String
+NAME, String
+CONTINENT, String
 countries
 ID, int
 CODE, String

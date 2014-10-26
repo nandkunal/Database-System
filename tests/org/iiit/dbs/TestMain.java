@@ -7,12 +7,11 @@ public class TestMain {
 		String configPath = "resources/config.txt";
 		dbSystem.readConfig(configPath);
 		dbSystem.populateDBInfo();
-		dbSystem.displayDataBaseMetaData();
 		dbSystem.initializeLRUTable();
-		dbSystem.getRecord("student", 1);
-		dbSystem.insertRecord("student", "6,Pops");
-		dbSystem.flushPages();
-		
+		//dbSystem.insertRecord("countries","302614,India,NA");
+		//dbSystem.flushPages();
+		//get record
+		System.out.println(dbSystem.getRecord("countries", 0));
 	}
 
 }
