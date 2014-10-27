@@ -6,7 +6,7 @@ public class Validator {
 	
 	
 	public static boolean isTableExists(String tableName){
-		return DBSystem.tableNamesList.contains(tableName);
+		return DBConfigReader.getInstance().getTableNamesList().contains(tableName);
 		
 	}
 	

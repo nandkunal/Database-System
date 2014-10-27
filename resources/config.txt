@@ -7,6 +7,8 @@ ID, int
 CODE, String
 NAME, String
 CONTINENT, String
+END
+BEGIN
 countries
 ID, int
 CODE, String

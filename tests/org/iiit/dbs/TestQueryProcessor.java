@@ -13,7 +13,7 @@ public class TestQueryProcessor {
 		queryObj = new QueryProcessor();
 		dbSystem = new DBSystem();
 		String configPath = "resources/config.txt";
-		dbSystem.readConfig(configPath);
+		DBConfigReader.getInstance().readConfig(configPath);
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
 	}

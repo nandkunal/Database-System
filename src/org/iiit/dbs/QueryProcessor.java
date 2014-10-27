@@ -40,17 +40,13 @@ import net.sf.jsqlparser.statement.select.SelectExpressionItem;
 
 public class QueryProcessor {
 	
-	private List<String> tableNamesList;
-	private int pageSize;
-	private int numPages;
-	private String pathTables;
 	private static final String CONFIGPATH="resources/config.txt";
 	private static final String TABLE_METADATA_EXTENSION="data";
 	private static final String FILE_EXTENSION="csv";
 	
 	
 	public QueryProcessor(){
-		readConfig(CONFIGPATH);
+		
 	}
 	
 	public void queryType(String query){
@@ -245,6 +241,8 @@ public class QueryProcessor {
 			try {
 				bufferedwriter.close();
 				filewriter.close();
+				//Update the values of DBConfigReader
+				DBConfigReader.getInstance().readConfig(CONFIGPATH);
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -283,12 +281,12 @@ public class QueryProcessor {
 	}
 
 	private boolean isTableExists(String tableName) {
-		return tableNamesList.contains(tableName);
+		return DBConfigReader.getInstance().getTableNamesList().contains(tableName);
 	}
 	
 	private void createTableMetaData(String tableName,List<ColumnDefinition> tableDefns){
 		String fileName = tableName+"."+TABLE_METADATA_EXTENSION;
-		String metadataPath="resources"+File.separator+"db"+File.separator;
+		String metadataPath=DBConfigReader.getInstance().getPathTables()+File.separator;
 		File f = new File(metadataPath+fileName);
 		StringBuilder str = new StringBuilder();
 		for(ColumnDefinition defn:tableDefns){
@@ -319,62 +317,6 @@ public class QueryProcessor {
 	}
 	
 
-	public void readConfig(String configFilePath)
-	{
-		tableNamesList = new ArrayList<String>();
-		Map<String,String> configParameters = new HashMap<String,String>();
 
-	      BufferedReader reader = null;
-	      InputStream in = null;
-			try {
-				 in = new FileInputStream(new File(configFilePath));
-		         reader = new BufferedReader(new InputStreamReader(in));
-		        String line;
-		        int start = 0;
-		        while ((line = reader.readLine()) != null) 
-		        {
-		        	Matcher m = Pattern.compile("([A-Z_]+)(\\s+)(.*)").matcher(line);
-		        	while(m.find()){
-		        		configParameters.put(m.group(1), m.group(3));
-		        	}
-		        	
-		        	if(line.equalsIgnoreCase("BEGIN")){
-		        		start=1;
-		        	}
-		        	if(line.equalsIgnoreCase("END")){
-	    				start = 0;
-	    			}
-		        	if(start !=0){
-		        		
-		        	if(!line.contains(",")&&(!line.contains("_")) && !line.equalsIgnoreCase("BEGIN")){
-		        		tableNamesList.add(line);
-		        	}
-		        		
-		        	}
-		        	
-		       }
-		        pageSize = 	Integer.parseInt(configParameters.get("PAGE_SIZE"));
-		        numPages = Integer.parseInt(configParameters.get("NUM_PAGES"));
-		        pathTables = configParameters.get("PATH_FOR_DATA");
-		        
-			}
-			catch (FileNotFoundException e) {
-				e.printStackTrace();
-			}
-			catch (IOException e) {
-				e.printStackTrace();
-			}
-			finally
-			{
-				try{
-					reader.close();
-					in.close();
-				}catch(Exception e){
-					e.printStackTrace();
-				}
-			}
-		
-	
-	}
 
 }

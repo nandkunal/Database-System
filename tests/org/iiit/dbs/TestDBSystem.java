@@ -14,7 +14,7 @@ public class TestDBSystem {
 	public void setUp(){
 		dbSystem = new DBSystem();
 		String configPath = "resources/config.txt";
-		dbSystem.readConfig(configPath);
+		DBConfigReader.getInstance().readConfig(configPath);
 	}
 	
 	//@Test

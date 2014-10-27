@@ -5,7 +5,7 @@ public class TestMain {
 	public static void main(String[] args) {
 		DBSystem dbSystem = new DBSystem();
 		String configPath = "resources/config.txt";
-		dbSystem.readConfig(configPath);
+		DBConfigReader.getInstance().readConfig(configPath);
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
 		//dbSystem.insertRecord("countries","302614,India,NA");
