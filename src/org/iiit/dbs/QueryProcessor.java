@@ -18,6 +18,7 @@ import java.util.Map;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import org.iiit.dbs.execptions.TableNotFoundExecption;
 import org.iiit.dbs.util.TablesNamesFinder;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -70,13 +71,13 @@ public class QueryProcessor {
 		}
 	}
 	
+
+
 	private void selectCommand(String query) {
 		
 		CCJSqlParserManager parserManager = new CCJSqlParserManager();
 		try {
 			Select selectStmt = (Select) parserManager.parse(new StringReader(query));
-			TablesNamesFinder tableFinder = new TablesNamesFinder();
-			List<String> tableList = tableFinder.getTableList(selectStmt);
 			displaySelectCommand(selectStmt);
 		} catch (JSQLParserException e) {
 			System.err.print("Invalid Query");
@@ -85,7 +86,7 @@ public class QueryProcessor {
 		
 	}
 
-	private void displaySelectCommand(Select selectStmt) {
+	private void displaySelectAllCommand(Select selectStmt) {
 		StringBuilder str = new StringBuilder();
 		str.append("Querytype:select");
 		str.append("\n");
@@ -99,90 +100,99 @@ public class QueryProcessor {
 		}
 		str.deleteCharAt(str.length()-1);
 		str.append("\n");
-		str.append("Columns:");
+		System.out.println(str.toString());
+		
+	}
+
+	private void displaySelectCommand(Select selectStmt) {
+		QueryAttributes attr=new QueryAttributes();
+		TablesNamesFinder tableFinder = new TablesNamesFinder();
+		List<String> tableList = tableFinder.getTableList(selectStmt);
+		attr.setTableNames(tableList);
 		PlainSelect plainSelect = (PlainSelect)selectStmt.getSelectBody();
 		List selectElements = plainSelect.getSelectItems();
+		List<String>columnNames=new ArrayList<String>();
+		if(selectElements.get(0).toString().equalsIgnoreCase("*")){
+			
+			columnNames.add("*");
+		}else{
 		for(int i=0;i<selectElements.size();i++){
 			SelectExpressionItem expressionItem = (SelectExpressionItem)selectElements.get(i);
 			if(expressionItem.getExpression() instanceof Column){
 			Column col = (Column)expressionItem.getExpression();
-			str.append(col.getColumnName());
-			str.append(",");
+			columnNames.add(col.getColumnName());
 			}else if(expressionItem.getExpression() instanceof Parenthesis){
 				Parenthesis par = (Parenthesis)expressionItem.getExpression();
 				Column col = (Column)par.getExpression();
-				str.append(col.getColumnName());
-				str.append(",");
+				columnNames.add(col.getColumnName());
 			}
 		}
-		str.deleteCharAt(str.length()-1);
+		
 		//get Distinct Columns
-		str.append("\n");
-		str.append("Distinct:");
+		}
+		attr.setColumnNames(columnNames);
+		List<String> distinctColNames= new ArrayList<String>();
 		if(plainSelect.getDistinct()!=null){
 			for(int i=0;i<selectElements.size();i++){
 				SelectExpressionItem expressionItem = (SelectExpressionItem)selectElements.get(i);
 				if(expressionItem.getExpression() instanceof Column){
 				Column col = (Column)expressionItem.getExpression();
-				str.append(col.getColumnName());
-				str.append(",");
+				distinctColNames.add(col.getColumnName());
 				}else if(expressionItem.getExpression() instanceof Parenthesis){
 					Parenthesis par = (Parenthesis)expressionItem.getExpression();
 					Column col = (Column)par.getExpression();
-					str.append(col.getColumnName());
-					str.append(",");
+					distinctColNames.add(col.getColumnName());
 				}
 			}
-			str.deleteCharAt(str.length()-1);
 		}else{
-			str.append("NA");
+			distinctColNames.add("NA");
 		}
+		attr.setDistinctColumnName(distinctColNames);
 		//get Where Condition
-		str.append("\n");
-		str.append("Condition:");
-		str.append((plainSelect.getWhere()==null)?"NA":plainSelect.getWhere());
+		
+		attr.setConditionStatement((plainSelect.getWhere()==null)?"NA":plainSelect.getWhere().toString());
 		//get By Order By
-		str.append("\n");
-		str.append("Orderby:");
+		List<String>orderByColNames=new ArrayList<String>();
 		List orderByElements = plainSelect.getOrderByElements();
 		if(orderByElements!=null){
 		for(int j=0;j<orderByElements.size();j++){
 		OrderByElement orderElem = (OrderByElement)orderByElements.get(j);	
 		if(orderElem.getExpression() instanceof Column){
 		Column col = (Column)orderElem.getExpression();
-		str.append(col.getColumnName());
-		str.append(",");
+		orderByColNames.add(col.getColumnName());
 		}
 		}
-		str.deleteCharAt(str.length()-1);
+		
 		}else{
-			str.append("NA");
+			orderByColNames.add("NA");
 		}
-		str.append("\n");
-		str.append("Groupby:");
+		attr.setOrderByColumnName(orderByColNames);
 		
 		//Groupby
+		List<String>groupByCols= new ArrayList<>();
 		List groupBy = plainSelect.getGroupByColumnReferences();
 		if(groupBy!=null){
 		for(int i=0;i<groupBy.size();i++){
 			Column col = (Column) groupBy.get(i);
-			str.append(col.getColumnName());
-			str.append(",");
+			groupByCols.add(col.getColumnName());
 		}
-		str.deleteCharAt(str.length()-1);
 		}else{
-			str.append("NA");	
+			groupByCols.add("NA");	
 		}
-		str.append("\n");
-		str.append("Having:");
+		
 		Expression havingExpr = plainSelect.getHaving();
 		if(havingExpr!=null){
-			str.append(havingExpr);	
+			attr.setHavingStatement(havingExpr.toString());	
 		}else{
-			str.append("NA");		
+			attr.setHavingStatement("NA");		
 		}
-	   System.out.println(str);
-		
+	   
+		SelectQueryExecutor queryExecutor=new SelectQueryExecutor(attr);
+		try {
+			queryExecutor.executeQuery();
+		} catch (TableNotFoundExecption e) {
+			System.out.println(e.getMessage());
+		}
 		
 		
 	}

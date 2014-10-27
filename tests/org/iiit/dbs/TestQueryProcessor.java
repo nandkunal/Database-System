@@ -6,48 +6,58 @@ import org.junit.Test;
 
 public class TestQueryProcessor {
 	private QueryProcessor queryObj;
+	private DBSystem dbSystem = null;
 
 	@Before
 	public void setUp() throws Exception {
 		queryObj = new QueryProcessor();
+		dbSystem = new DBSystem();
+		String configPath = "resources/config.txt";
+		dbSystem.readConfig(configPath);
+		dbSystem.populateDBInfo();
+		dbSystem.initializeLRUTable();
 	}
 
 	@After
 	public void tearDown() throws Exception {
 		queryObj = null;
 	}
-
 	@Test
+    public void testAllSelect() {
+	queryObj.queryType("SELECT  * from countries");
+	
+}
+	//@Test
 	    public void testSelect() {
 		queryObj.queryType("SELECT  name ,ID from countries");
 		
 	}
-	@Test
+	//@Test
     public void testSelectDistinct() {
 	queryObj.queryType("SELECT DISTINCT City FROM Customers;");
 	
 }
-	@Test
+	//@Test
     public void testSelectWhere() {
-	queryObj.queryType("SELECT name FROM countries where id=1;");
+	queryObj.queryType("SELECT name FROM countries where id=1 and value='Abc';");
 	
 }
-	@Test
+	//@Test
     public void testSelectOrderBy() {
 	queryObj.queryType("SELECT name FROM countries where id=1 ORDER BY id;");
 	
 }
-	@Test
+	//@Test
     public void testSelectGroupBy() {
 	queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title;");
 	
 }
-	@Test
+	//@Test
     public void testSelectHaving() {
 	queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title HAVING id>10;");
 	
 }
-	@Test
+	//@Test
     public void testCreate() {
 	queryObj.queryType("CREATE TABLE Persons(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));");
 	

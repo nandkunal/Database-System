@@ -29,7 +29,7 @@ public class DBSystem {
 	private static int tableCount;
 	public String pathTables;
 	
-	private static ArrayList<String> tableNamesList = new ArrayList<String>();
+	public static ArrayList<String> tableNamesList = new ArrayList<String>();
 	private static HashMap<String,List<Page>> dbMetaData = new HashMap<String,List<Page>>();
 	public static HashMap<String, HashMap<Integer,Page> > localPageTable;
 	public static LinkedHashMap<Integer,HashMap<Integer,String>> page;
@@ -283,7 +283,14 @@ public class DBSystem {
 	 * numbers starting from 0. So, you have total 0 to <NUM_PAGES 1>pages.) 
 	 * 
 	 */
-	
+	public List<String> getRecord(String tableName)
+	{
+		List<String>output = new ArrayList<>();
+		 String tableNameFile=pathTables+File.separator+tableName;
+         tableNameFile=tableNameFile.concat(".csv");
+         
+		return output;
+	}
 	
 
 	public String getRecord(String tableName, int recordId)
