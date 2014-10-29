@@ -10,12 +10,9 @@ public class TestQueryProcessor {
 
 	@Before
 	public void setUp() throws Exception {
-		queryObj = new QueryProcessor();
-		dbSystem = new DBSystem();
 		String configPath = "resources/config.txt";
 		DBConfigReader.getInstance().readConfig(configPath);
-		dbSystem.populateDBInfo();
-		dbSystem.initializeLRUTable();
+	
 	}
 
 	@After
@@ -24,7 +21,13 @@ public class TestQueryProcessor {
 	}
 	@Test
     public void testAllSelect() {
-	queryObj.queryType("SELECT  * from countries");
+		dbSystem = new DBSystem();
+		dbSystem.populateDBInfo();
+		dbSystem.initializeLRUTable();
+		queryObj = new QueryProcessor(dbSystem);
+		//CreateIndex index = new CreateIndex("countries", "id");
+		//index.readDataFileAndWriteToIndex();
+	    queryObj.queryType("SELECT  * from countries");
 	
 }
 	//@Test

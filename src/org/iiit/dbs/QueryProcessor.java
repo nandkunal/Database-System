@@ -43,9 +43,11 @@ public class QueryProcessor {
 	private static final String CONFIGPATH="resources/config.txt";
 	private static final String TABLE_METADATA_EXTENSION="data";
 	private static final String FILE_EXTENSION="csv";
+	private DBSystem db = null;
 	
 	
-	public QueryProcessor(){
+	public QueryProcessor(DBSystem db){
+		this.db=db;
 		
 	}
 	
@@ -183,7 +185,7 @@ public class QueryProcessor {
 			attr.setHavingStatement("NA");		
 		}
 	   
-		SelectQueryExecutor queryExecutor=new SelectQueryExecutor(attr);
+		SelectQueryExecutor queryExecutor=new SelectQueryExecutor(attr,db);
 		try {
 			queryExecutor.executeQuery();
 		} catch (TableNotFoundExecption e) {

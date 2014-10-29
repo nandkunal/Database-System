@@ -6,7 +6,9 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class TestDBSystem {
+public class TestDBSystem
+{/*
+	
 	private DBSystem dbSystem = null;
 	
 	
@@ -45,4 +47,4 @@ public class TestDBSystem {
 	}
 	
 
-}
+*/}

@@ -2,24 +2,9 @@ PAGE_SIZE 100
 NUM_PAGES 4
 PATH_FOR_DATA resources/db
 BEGIN
-testcountries
-ID, int
-CODE, String
-NAME, String
-CONTINENT, String
-END
-BEGIN
 countries
 ID, int
 CODE, String
 NAME, String
 CONTINENT, String
-END
-BEGIN
-Persons
-PersonID,int
-LastName,varchar (255)
-FirstName,varchar (255)
-Address,varchar (255)
-City,varchar (255)
 END
