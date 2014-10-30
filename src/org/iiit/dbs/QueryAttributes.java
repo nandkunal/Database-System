@@ -53,6 +53,15 @@ public class QueryAttributes {
 	public void setConditionStatement(String conditionStatement) {
 		this.conditionStatement = conditionStatement;
 	}
+	@Override
+	public String toString() {
+		return "QueryAttributes [tableNames=" + tableNames + ", columnNames="
+				+ columnNames + ", distinctColumnName=" + distinctColumnName
+				+ ", orderByColumnName=" + orderByColumnName
+				+ ", groupByColumnName=" + groupByColumnName
+				+ ", havingStatement=" + havingStatement
+				+ ", conditionStatement=" + conditionStatement + "]";
+	}
 	
 	
 }

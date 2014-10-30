@@ -11,7 +11,7 @@ public class TableNotFoundExecption extends Exception {
 		this.tableName=tableName;
 	}
 	public String getMessage(){
-		return "Table "+tableName+" doesnot exists";
+		return "Table '"+tableName+"' doesnot exists";
 	}
 	
 	

@@ -12,6 +12,10 @@ public class TestQueryProcessor {
 	public void setUp() throws Exception {
 		String configPath = "resources/config.txt";
 		DBConfigReader.getInstance().readConfig(configPath);
+		dbSystem = new DBSystem();
+		dbSystem.populateDBInfo();
+		dbSystem.initializeLRUTable();
+		queryObj = new QueryProcessor(dbSystem);
 	
 	}
 
@@ -19,20 +23,17 @@ public class TestQueryProcessor {
 	public void tearDown() throws Exception {
 		queryObj = null;
 	}
-	@Test
+	//@Test
     public void testAllSelect() {
-		dbSystem = new DBSystem();
-		dbSystem.populateDBInfo();
-		dbSystem.initializeLRUTable();
-		queryObj = new QueryProcessor(dbSystem);
+	
 		//CreateIndex index = new CreateIndex("countries", "id");
 		//index.readDataFileAndWriteToIndex();
 	    queryObj.queryType("SELECT  * from countries");
 	
 }
-	//@Test
+	@Test
 	    public void testSelect() {
-		queryObj.queryType("SELECT  name ,ID from countries");
+		queryObj.queryType("SELECT NAME from countries");
 		
 	}
 	//@Test

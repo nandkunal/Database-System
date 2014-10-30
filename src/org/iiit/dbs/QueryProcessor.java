@@ -19,6 +19,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import org.iiit.dbs.execptions.TableNotFoundExecption;
+import org.iiit.dbs.execptions.UnknownColumnException;
 import org.iiit.dbs.util.TablesNamesFinder;
 
 import net.sf.jsqlparser.JSQLParserException;
@@ -84,23 +85,6 @@ public class QueryProcessor {
 		
 	}
 
-	private void displaySelectAllCommand(Select selectStmt) {
-		StringBuilder str = new StringBuilder();
-		str.append("Querytype:select");
-		str.append("\n");
-		str.append("Tablename:");
-		TablesNamesFinder tableFinder = new TablesNamesFinder();
-		List<String> tableList = tableFinder.getTableList(selectStmt);
-		for(String tableName : tableList)
-		{
-			str.append(tableName);
-			str.append(",");
-		}
-		str.deleteCharAt(str.length()-1);
-		str.append("\n");
-		System.out.println(str.toString());
-		
-	}
 
 	private void displaySelectCommand(Select selectStmt) {
 		QueryAttributes attr=new QueryAttributes();
@@ -187,7 +171,11 @@ public class QueryProcessor {
 	   
 		SelectQueryExecutor queryExecutor=new SelectQueryExecutor(attr,db);
 		try {
-			queryExecutor.executeQuery();
+			try {
+				queryExecutor.executeQuery();
+			} catch (UnknownColumnException e) {
+				e.printStackTrace();
+			}
 		} catch (TableNotFoundExecption e) {
 			System.out.println(e.getMessage());
 		}

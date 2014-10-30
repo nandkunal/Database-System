@@ -181,8 +181,6 @@ public class DBSystem {
 	}
 	public void getAllRecords(String tableName)
 	{
-
-		
 		String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName;
         tableNameFile=tableNameFile.concat(".index");
         int i,pageIndex;
@@ -809,6 +807,123 @@ public class DBSystem {
 			
 			
 			System.out.println(randomAccessFile.readLine());
+		}
+		
+	}
+
+
+
+	public void getAllRecordsByColName(String tableName, List<String> cols) {
+
+		String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName;
+        tableNameFile=tableNameFile.concat(".index");
+        int i,pageIndex;
+        String line="",replaceTableName="";
+        int startOffset=0,endOffset=0,availablePage,startLine=0,endLine=0;
+        
+    
+        
+        /*check if any free page available in global page table*/
+        availablePage=freePageAvailable();
+        // if free page not available then go for page replacement*/
+        if(availablePage==-1)
+        {
+      	  availablePage=replacePageAlgo();
+      	  /* get table name from which the old entry is to be invalidated */
+            replaceTableName=globalPageMap.get(availablePage);
+            /* remove old page entry*/
+            localPageTable.get(replaceTableName).remove(availablePage);
+           //System.out.println("replaced table name="+replaceTableName+" replaced page="+availablePage);
+         }
+        
+        System.out.println("MISS "+availablePage);
+        List <Page> table=dbMetaData.get(tableName);
+        /*
+         * Logic to find if RecordId exists in Last Page
+         */
+        
+       
+        
+        
+       
+              startOffset=table.get(0).offSet;
+              startLine=table.get(0).startRecord;
+              endLine=table.get(table.size()-1).endRecord;
+              endOffset=table.get(table.size()-1).offSet;
+
+          
+
+       
+       
+       try
+       {
+      	 HashMap<Integer,String> buffer=new HashMap<Integer, String>();
+
+      	 /* open table file to read page */
+      	 RandomAccessFile randomAccessFile=new RandomAccessFile(tableNameFile,"r");
+
+      	 /* goto first record of that page using offset*/
+      	 randomAccessFile.seek((long)startOffset);
+
+
+      	 /*read next n records*/
+      	 for(i=0;i< (endLine-startLine+1);i++)
+      	 {
+      		 line=randomAccessFile.readLine();
+      		 if(line==null)
+      			 break;
+      		 
+      		 buffer.put(startLine+i,line);
+
+      	 }
+      	 page.put(availablePage,buffer);
+
+      	 /* Add newly aquired page number to localpagetable of that table*/
+
+      	 
+
+      	 /*put newly loaded page and its related table name in global page table*/
+      	 globalPageMap.put(availablePage,tableName);
+
+          randomAccessFile.close();
+          seekRecordsFromMainTableFile(tableName,buffer,cols);
+
+       }
+       catch (Exception e)
+       {
+      	 e.printStackTrace();
+       //System.out.println("Error opening table file"+e);
+       }
+       
+
+	
+		
+	}
+
+
+
+	private void seekRecordsFromMainTableFile(String tableName,
+			HashMap<Integer, String> buffer, List<String> cols) throws IOException {
+		String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName;
+        tableNameFile=tableNameFile.concat(".csv");
+        RandomAccessFile randomAccessFile=new RandomAccessFile(tableNameFile,"r");
+		for (Map.Entry<Integer, String> entry : buffer.entrySet()) {
+			
+			
+			String line = randomAccessFile.readLine();
+			String[] col = line.split(",");
+			List<String> tableCols = DBConfigReader.getInstance().getTableColsListMap().get(tableName);
+			List<Integer> indexlist=new ArrayList<Integer>();
+			for(int c=0;c<tableCols.size();c++){
+				if(cols.contains(tableCols.get(c))){
+					indexlist.add(c);
+				}
+			}
+			for(int p : indexlist)
+			{
+			System.out.print(col[p] + " ");
+			}
+			System.out.println(" ");
 		}
 		
 	}

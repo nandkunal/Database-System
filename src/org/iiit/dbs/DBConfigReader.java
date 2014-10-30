@@ -19,7 +19,8 @@ public class DBConfigReader {
 	
 	private static DBConfigReader reader;
 	private List<String>tableNamesList=new ArrayList<String>();
-	private Map<String,Map<String,String>> tablesMetaData = new HashMap<String,Map<String,String>>(); 
+	private Map<String,Map<String,String>> tablesMetaData = new HashMap<String,Map<String,String>>();
+	private Map<String,List<String>> tableColsListMap = new HashMap<String,List<String>>();
 	private  int pageSize;
 	private  int numPages;
 	private  String pathTables;
@@ -61,6 +62,7 @@ public class DBConfigReader {
 		        		if(!line.contains(",")&&(!line.contains("_")) && !line.equalsIgnoreCase("BEGIN"))
 		        		{  
 		        			Map<String,String> colMap=new HashMap<String,String>();
+		        			List<String>colsList = new ArrayList<String>();
 		        			tableNamesList.add(line);
 		        			while(true)
 		        			{  
@@ -68,8 +70,10 @@ public class DBConfigReader {
 		        				if(!val.contains(","))
 		        					break;
 		        				String[] cols=val.split(",");
+		        				colsList.add(removeSpaces(cols[0]));
 			        			colMap.put(removeSpaces(cols[0]), removeSpaces(cols[1]));
 		        			}
+		        			tableColsListMap.put(line, colsList);
 		        			tablesMetaData.put(line, colMap);
 		        		}
 		        	}
@@ -125,6 +129,10 @@ public class DBConfigReader {
 
 	public Map<String, Map<String, String>> getTablesMetaData() {
 		return tablesMetaData;
+	}
+
+	public Map<String, List<String>> getTableColsListMap() {
+		return tableColsListMap;
 	}
 
 }

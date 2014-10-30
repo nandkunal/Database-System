@@ -2,16 +2,16 @@ package org.iiit.dbs;
 
 public class TestMain {
 
-	public static void main(String[] args) {
-		DBSystem dbSystem = new DBSystem();
+	public static void main(String[] args)
+	{   
 		String configPath = "resources/config.txt";
 		DBConfigReader.getInstance().readConfig(configPath);
+		DBSystem dbSystem = new DBSystem();
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
-		//dbSystem.insertRecord("countries","302614,India,NA");
-		//dbSystem.flushPages();
-		//get record
-		System.out.println(dbSystem.getRecord("countries", 0));
+		QueryProcessor queryObj = new QueryProcessor(dbSystem);
+	   // queryObj.queryType("SELECT  * from countries");
+		queryObj.queryType("SELECT NAME,ID from countries");
 	}
 
 }
