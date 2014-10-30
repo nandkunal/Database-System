@@ -16,7 +16,6 @@ public class Validator {
 	public static boolean isColumnExistsInTable(String tableName,String columnName) 
 	{
 		List<String> colNames = DBConfigReader.getInstance().getTableColsListMap().get(tableName);
-		System.out.println(colNames);
 		if(colNames!=null){
 			if(colNames.contains(removeSpaces(columnName))){
 				return true;

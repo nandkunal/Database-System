@@ -9,9 +9,9 @@ public class TestMain {
 		DBSystem dbSystem = new DBSystem();
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
-		QueryProcessor queryObj = new QueryProcessor(dbSystem);
-	   // queryObj.queryType("SELECT  * from countries");
-		queryObj.queryType("SELECT NAME,ID from countries");
+		 QueryProcessor queryObj = new QueryProcessor(dbSystem);
+	     //queryObj.queryType("SELECT  * from countries");
+		 queryObj.queryType("SELECT NAME,ID from countries");
 	}
 
 }

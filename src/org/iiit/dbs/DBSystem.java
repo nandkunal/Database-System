@@ -838,14 +838,7 @@ public class DBSystem {
         
         System.out.println("MISS "+availablePage);
         List <Page> table=dbMetaData.get(tableName);
-        /*
-         * Logic to find if RecordId exists in Last Page
-         */
         
-       
-        
-        
-       
               startOffset=table.get(0).offSet;
               startLine=table.get(0).startRecord;
               endLine=table.get(table.size()-1).endRecord;
@@ -914,10 +907,10 @@ public class DBSystem {
 			String[] col = line.split(",");
 			List<String> tableCols = DBConfigReader.getInstance().getTableColsListMap().get(tableName);
 			List<Integer> indexlist=new ArrayList<Integer>();
-			for(int c=0;c<tableCols.size();c++){
-				if(cols.contains(tableCols.get(c))){
-					indexlist.add(c);
-				}
+			for(int c=0;c<cols.size();c++){
+				
+					indexlist.add(tableCols.indexOf(cols.get(c)));
+				
 			}
 			for(int p : indexlist)
 			{
