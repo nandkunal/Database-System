@@ -16,3 +16,5 @@ Assumptions
 1 Record = 1 Line
 Unspanned File Organization
 Record length less than or equals to page size
+Index File is already Created using CreateIndex.java for countries.csv
+In case of a new table entry in resources/config.txt , Create Index has to run on tableName and Index Column
