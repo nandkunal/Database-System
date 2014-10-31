@@ -9,8 +9,11 @@ public class QueryAttributes {
 	private List<String> distinctColumnName;
 	private List<String> orderByColumnName;
 	private List<String> groupByColumnName;
+	private String leftWhereColumnName;
+	private String rightWhereExpValue;
+	private String whereClauseOperator;
 	private String havingStatement;
-	private String conditionStatement;
+	
 	public List<String> getTableNames() {
 		return tableNames;
 	}
@@ -47,11 +50,23 @@ public class QueryAttributes {
 	public void setHavingStatement(String havingStatement) {
 		this.havingStatement = havingStatement;
 	}
-	public String getConditionStatement() {
-		return conditionStatement;
+	public String getLeftWhereColumnName() {
+		return leftWhereColumnName;
 	}
-	public void setConditionStatement(String conditionStatement) {
-		this.conditionStatement = conditionStatement;
+	public void setLeftWhereColumnName(String leftWhereColumn) {
+		this.leftWhereColumnName = leftWhereColumn;
+	}
+	public String getWhereClauseOperator() {
+		return whereClauseOperator;
+	}
+	public void setWhereClauseOperator(String whereClauseOperator) {
+		this.whereClauseOperator = whereClauseOperator;
+	}
+	public String getRightWhereExpValue() {
+		return rightWhereExpValue;
+	}
+	public void setRightWhereExpValue(String rightWhereExpValue) {
+		this.rightWhereExpValue = rightWhereExpValue;
 	}
 	@Override
 	public String toString() {
@@ -59,8 +74,10 @@ public class QueryAttributes {
 				+ columnNames + ", distinctColumnName=" + distinctColumnName
 				+ ", orderByColumnName=" + orderByColumnName
 				+ ", groupByColumnName=" + groupByColumnName
-				+ ", havingStatement=" + havingStatement
-				+ ", conditionStatement=" + conditionStatement + "]";
+				+ ", leftWhereColumnName=" + leftWhereColumnName
+				+ ", rightWhereExpValue=" + rightWhereExpValue
+				+ ", whereClauseOperator=" + whereClauseOperator
+				+ ", havingStatement=" + havingStatement + "]";
 	}
 	
 	

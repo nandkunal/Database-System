@@ -22,13 +22,26 @@ public class SelectQueryExecutor {
 			if(!Validator.isTableExists(tableName)){
 				throw new TableNotFoundExecption(tableName);
 			}
-			if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") )
+			if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") && attributes.getLeftWhereColumnName()!=null
+					&& attributes.getRightWhereExpValue()!=null)
+			{
+				displayAllRowsByWhereCondition(tableName,attributes.getLeftWhereColumnName(),attributes.getRightWhereExpValue());
+			}
+			else if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") )
 			{
 				displayAllRows(tableName);
-			}else{
+			}
+			else if(attributes.getColumnNames().size()>0){
 				displayAllRowsWithColumns(tableName,attributes.getColumnNames());
 			}
 		}
+	}
+
+
+	private void displayAllRowsByWhereCondition(String tableName,
+			String leftWhereColumnName, String rightWhereExpValue) {
+		
+		System.out.println("------");
 	}
 
 	private void displayAllRowsWithColumns(String tableName,List<String> columnNames) throws TableNotFoundExecption, UnknownColumnException {

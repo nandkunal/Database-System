@@ -1,43 +1,31 @@
 package org.iiit.dbs;
 
-import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.io.StringReader;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
-
-import org.iiit.dbs.execptions.TableNotFoundExecption;
-import org.iiit.dbs.execptions.UnknownColumnException;
-import org.iiit.dbs.util.TablesNamesFinder;
 
 import net.sf.jsqlparser.JSQLParserException;
 import net.sf.jsqlparser.expression.Expression;
 import net.sf.jsqlparser.expression.Parenthesis;
+import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
-import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
-import net.sf.jsqlparser.statement.select.AllColumns;
-import net.sf.jsqlparser.statement.select.FromItem;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
-import net.sf.jsqlparser.statement.select.SelectBody;
 import net.sf.jsqlparser.statement.select.SelectExpressionItem;
+
+import org.iiit.dbs.execptions.TableNotFoundExecption;
+import org.iiit.dbs.execptions.UnknownColumnException;
+import org.iiit.dbs.util.TablesNamesFinder;
 
 public class QueryProcessor {
 	
@@ -132,7 +120,21 @@ public class QueryProcessor {
 		attr.setDistinctColumnName(distinctColNames);
 		//get Where Condition
 		
-		attr.setConditionStatement((plainSelect.getWhere()==null)?"NA":plainSelect.getWhere().toString());
+		if(plainSelect.getWhere() instanceof EqualsTo)
+		{
+			Expression leftExp = ((EqualsTo)plainSelect.getWhere()).getLeftExpression();
+			if(leftExp!=null){
+			Column whereCol= (Column)leftExp;
+			attr.setLeftWhereColumnName(whereCol.getColumnName());
+			}
+			Expression rightExp = ((EqualsTo)plainSelect.getWhere()).getRightExpression();
+			if(rightExp!=null){
+				attr.setRightWhereExpValue(rightExp.toString());
+			}
+			attr.setWhereClauseOperator("equalsTo");
+		}
+		
+		
 		//get By Order By
 		List<String>orderByColNames=new ArrayList<String>();
 		List orderByElements = plainSelect.getOrderByElements();

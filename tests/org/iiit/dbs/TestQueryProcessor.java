@@ -31,7 +31,7 @@ public class TestQueryProcessor {
 	    queryObj.queryType("SELECT  * from countries");
 	
 }
-	@Test
+	//@Test
 	    public void testSelect() {
 		queryObj.queryType("SELECT NAME from countries");
 		
@@ -41,9 +41,9 @@ public class TestQueryProcessor {
 	queryObj.queryType("SELECT DISTINCT City FROM Customers;");
 	
 }
-	//@Test
+	@Test
     public void testSelectWhere() {
-	queryObj.queryType("SELECT name FROM countries where id=1 and value='Abc';");
+	queryObj.queryType("SELECT * FROM countries where ID=1;");
 	
 }
 	//@Test
