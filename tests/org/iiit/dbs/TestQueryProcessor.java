@@ -1,5 +1,7 @@
 package org.iiit.dbs;
 
+import java.io.IOException;
+
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -23,47 +25,87 @@ public class TestQueryProcessor {
 	public void tearDown() throws Exception {
 		queryObj = null;
 	}
-	@Test
+	//@Test
     public void testAllSelect() {
 	
 		//CreateIndex index = new CreateIndex("countries", "id");
 		//index.readDataFileAndWriteToIndex();
-	    queryObj.queryType("SELECT  * from countries");
+	    try {
+			queryObj.queryType("SELECT  * from countries");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	
 }
 	//@Test
 	    public void testSelect() {
-		queryObj.queryType("SELECT NAME from countries");
+		try {
+			queryObj.queryType("SELECT NAME,VAL from countries");
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		
 	}
 	//@Test
     public void testSelectDistinct() {
-	queryObj.queryType("SELECT DISTINCT City FROM Customers;");
+	try {
+		queryObj.queryType("SELECT DISTINCT City FROM Customers;");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 	@Test
     public void testSelectWhere() {
-	queryObj.queryType("SELECT * FROM countries where ID=1;");
+	try {
+		queryObj.queryType("SELECT * FROM countries where ID=302622;");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 	//@Test
     public void testSelectOrderBy() {
-	queryObj.queryType("SELECT name FROM countries where id=1 ORDER BY id;");
+	try {
+		queryObj.queryType("SELECT name FROM countries where id=1 ORDER BY id;");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 	//@Test
     public void testSelectGroupBy() {
-	queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title;");
+	try {
+		queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title;");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 	//@Test
     public void testSelectHaving() {
-	queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title HAVING id>10;");
+	try {
+		queryObj.queryType("SELECT name FROM countries where id=1 GROUP BY title HAVING id>10;");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 	//@Test
     public void testCreate() {
-	queryObj.queryType("CREATE TABLE Persons(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));");
+	try {
+		queryObj.queryType("CREATE TABLE Persons(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));");
+	} catch (IOException e) {
+		// TODO Auto-generated catch block
+		e.printStackTrace();
+	}
 	
 }
 }

@@ -40,7 +40,7 @@ public class QueryProcessor {
 		
 	}
 	
-	public void queryType(String query){
+	public void queryType(String query) throws IOException{
 		if(query !=null){
 			CCJSqlParserManager parserManager = new CCJSqlParserManager();
 			try {
@@ -60,7 +60,7 @@ public class QueryProcessor {
 	
 
 
-	private void selectCommand(String query) {
+	private void selectCommand(String query) throws IOException {
 		
 		CCJSqlParserManager parserManager = new CCJSqlParserManager();
 		try {
@@ -74,7 +74,7 @@ public class QueryProcessor {
 	}
 
 
-	private void displaySelectCommand(Select selectStmt) {
+	private void displaySelectCommand(Select selectStmt) throws IOException {
 		QueryAttributes attr=new QueryAttributes();
 		TablesNamesFinder tableFinder = new TablesNamesFinder();
 		List<String> tableList = tableFinder.getTableList(selectStmt);

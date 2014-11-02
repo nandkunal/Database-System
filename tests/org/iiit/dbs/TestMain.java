@@ -1,5 +1,7 @@
 package org.iiit.dbs;
 
+import java.io.IOException;
+
 public class TestMain {
 
 	public static void main(String[] args)
@@ -10,9 +12,14 @@ public class TestMain {
 		dbSystem.populateDBInfo();
 		dbSystem.initializeLRUTable();
 		 QueryProcessor queryObj = new QueryProcessor(dbSystem);
-	     queryObj.queryType("SELECT  * from countries");
-		// queryObj.queryType("SELECT NAME,ID from countries");
-		 //queryObj.queryType("SELECT NAME,ID from countries where ID=302614");
+	     try {
+			queryObj.queryType("SELECT  * FROM countries;");
+			queryObj.queryType("SELECT * FROM countries where ID=302610;");
+			queryObj.queryType("SELECT NAME FROM countries;");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 
 }

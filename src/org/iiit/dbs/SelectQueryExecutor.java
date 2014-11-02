@@ -18,7 +18,7 @@ public class SelectQueryExecutor {
 		this.db=db;
 	}
 	
-	public void executeQuery() throws TableNotFoundExecption, UnknownColumnException{
+	public void executeQuery() throws TableNotFoundExecption, UnknownColumnException, IOException{
 		for(String tableName :attributes.getTableNames()){
 			if(!Validator.isTableExists(tableName)){
 				throw new TableNotFoundExecption(tableName);
@@ -26,7 +26,7 @@ public class SelectQueryExecutor {
 			if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") && attributes.getLeftWhereColumnName()!=null
 					&& attributes.getRightWhereExpValue()!=null)
 			{
-				displayAllRowsByWhereCondition(tableName,attributes.getLeftWhereColumnName(),attributes.getRightWhereExpValue());
+				displayAllRowsByWhereCondition(tableName,attributes.getLeftWhereColumnName(),attributes.getRightWhereExpValue(),attributes.getWhereClauseOperator());
 			}
 			else if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") )
 			{
@@ -40,12 +40,18 @@ public class SelectQueryExecutor {
 
 
 	private void displayAllRowsByWhereCondition(String tableName,
-			String leftWhereColumnName, String rightWhereExpValue) {
+			String leftWhereColumnName, String rightWhereExpValue,String operator) throws UnknownColumnException, IOException {
 		
-		//System.out.println("------");
+		  if(!Validator.isColumnExistsInTable(tableName, leftWhereColumnName))
+		  {
+			  throw new UnknownColumnException(leftWhereColumnName, tableName);	
+		  }
+		  //TODO Add Validation of Expression Type in LHS and RHS
+		  db.getAllRecordsByWhereCondition(tableName, leftWhereColumnName,rightWhereExpValue,operator);
+		  
 	}
 
-	private void displayAllRowsWithColumns(String tableName,List<String> columnNames) throws TableNotFoundExecption, UnknownColumnException {
+	private void displayAllRowsWithColumns(String tableName,List<String> columnNames) throws TableNotFoundExecption, UnknownColumnException, IOException {
 		for(String cols :columnNames)
 		{
 			if(!Validator.isColumnExistsInTable(tableName, cols))
