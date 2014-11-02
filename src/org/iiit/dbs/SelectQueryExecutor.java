@@ -1,5 +1,6 @@
 package org.iiit.dbs;
 
+import java.io.IOException;
 import java.util.List;
 
 import org.iiit.dbs.execptions.TableNotFoundExecption;
@@ -41,7 +42,7 @@ public class SelectQueryExecutor {
 	private void displayAllRowsByWhereCondition(String tableName,
 			String leftWhereColumnName, String rightWhereExpValue) {
 		
-		System.out.println("------");
+		//System.out.println("------");
 	}
 
 	private void displayAllRowsWithColumns(String tableName,List<String> columnNames) throws TableNotFoundExecption, UnknownColumnException {
@@ -59,7 +60,11 @@ public class SelectQueryExecutor {
 	private void displayAllRows(String tableName) {
 		long start=System.currentTimeMillis();
 		System.out.println("Displaying All Records");
-		db.getAllRecords(tableName);
+		try {
+			db.getAllRecords(tableName);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		long end=System.currentTimeMillis();
 		long diff=end-start;
 		float timelag=diff;

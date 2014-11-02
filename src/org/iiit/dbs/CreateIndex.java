@@ -1,11 +1,13 @@
 package org.iiit.dbs;
 
+import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileNotFoundException;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.RandomAccessFile;
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Scanner;
 import java.util.TreeMap;
 
 import org.iiit.dbs.execptions.TableNotFoundExecption;
@@ -27,39 +29,45 @@ public class CreateIndex {
 	}
 	
 	public void readDataFileAndWriteToIndex() throws TableNotFoundExecption, UnknownColumnException
-	{
+	{   
+		long offset = 0;
 		if(!Validator.isColumnExistsInTable(tableName, index))
 		{
 			throw new UnknownColumnException(index, tableName);
 		}
 		 String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName+"."+FILE_EXTENSION;
-		 long recordId=0;
 		 Map<Long,Long> indexMap = new TreeMap<Long,Long>();
-		 String line=null;
-		 RandomAccessFile randomAccessFile=null;
-		 RandomAccessFile indexFile=null;
+		 FileWriter fr = null;
+	     BufferedWriter br = null;
 		 String indexFileName=tableName+"."+TABLE_INDEX_EXTENSION;
 		 String indexFilePath=DBConfigReader.getInstance().getPathTables()+File.separator+indexFileName;
-		try {
+		 Scanner tableReader = null;
+		 try {
 			createIndexFile(indexFilePath);
-			 randomAccessFile=new RandomAccessFile(tableNameFile,"r");
-			 indexFile = new RandomAccessFile(indexFilePath,"rw");
-			 try {
+		    fr = new FileWriter(indexFilePath);
+            br = new BufferedWriter(fr);
+			tableReader = new Scanner(new File(tableNameFile));
+			tableReader.useDelimiter("\n");
+			while(tableReader.hasNext())
+			{
+				String lineReader = tableReader.next();
+				//TODO:Assuming the Index will be Long  Need to convert to String :)
+				//TODO:Assuming the first column is Index :)
+				indexMap.put(Long.parseLong(lineReader.split(",")[0]),offset);
+				offset+=lineReader.length()+1;
 				
-				while((line=randomAccessFile.readLine())!=null)
-				{
-					//System.out.println(line);
-					indexMap.put(Long.parseLong(line.split(",")[0]),recordId);
-					recordId++;
-				}
+			}
+			 
+			
+			
 				Iterator<Map.Entry<Long,Long>> entry = indexMap.entrySet().iterator();
 				while(entry.hasNext())
 				{
 					Map.Entry<Long, Long> ent = entry.next();
 					Long key = ent.getKey();
 					Long value = ent.getValue();
-					indexFile.writeChars(Long.toString(key)+","+Long.toString(value));
-					indexFile.writeChars("\n");
+					br.write(key.toString()+","+value.toString());
+					br.write(System.getProperty("line.separator"));
 				}
 				
 			} 
@@ -67,24 +75,20 @@ public class CreateIndex {
 					
 					e.printStackTrace();
 				}
-				
-		} catch (FileNotFoundException e) {
-			
-			e.printStackTrace();
-		}
-		finally
-		{
-			try {
-				indexFile.close();
-				randomAccessFile.close();
-				
+		 finally
+		 {
+			 try {
+				br.close();
+				fr.close();
+				tableReader.close();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			
+		 }
+				
 		}
-	}
+	
+	
 	
 	
 

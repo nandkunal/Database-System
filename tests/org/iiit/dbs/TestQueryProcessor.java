@@ -23,7 +23,7 @@ public class TestQueryProcessor {
 	public void tearDown() throws Exception {
 		queryObj = null;
 	}
-	//@Test
+	@Test
     public void testAllSelect() {
 	
 		//CreateIndex index = new CreateIndex("countries", "id");
