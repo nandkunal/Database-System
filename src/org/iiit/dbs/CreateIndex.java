@@ -30,36 +30,41 @@ public class CreateIndex {
 	
 	public void readDataFileAndWriteToIndex() throws TableNotFoundExecption, UnknownColumnException
 	{   
-		long offset = 0;
-		if(!Validator.isColumnExistsInTable(tableName, index))
+		//Check first Table Exists
+		if(!Validator.isTableExists(tableName)){
+			throw new TableNotFoundExecption(tableName);
+		}else
 		{
-			throw new UnknownColumnException(index, tableName);
-		}
-		 String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName+"."+FILE_EXTENSION;
-		 Map<Long,Long> indexMap = new TreeMap<Long,Long>();
-		 FileWriter fr = null;
-	     BufferedWriter br = null;
-		 String indexFileName=tableName+"."+TABLE_INDEX_EXTENSION;
-		 String indexFilePath=DBConfigReader.getInstance().getPathTables()+File.separator+indexFileName;
-		 Scanner tableReader = null;
-		 try {
-			createIndexFile(indexFilePath);
-		    fr = new FileWriter(indexFilePath);
-            br = new BufferedWriter(fr);
-			tableReader = new Scanner(new File(tableNameFile));
-			tableReader.useDelimiter("\n");
-			while(tableReader.hasNext())
+			long offset = 0;
+			if(!Validator.isColumnExistsInTable(tableName, index))
 			{
-				String lineReader = tableReader.next();
-				//TODO:Assuming the Index will be Long  Need to convert to String :)
-				//TODO:Assuming the first column is Index :)
-				indexMap.put(Long.parseLong(lineReader.split(",")[0]),offset);
-				offset+=lineReader.length()+1;
-				
+				throw new UnknownColumnException(index, tableName);
 			}
-			 
-			
-			
+			String tableNameFile=DBConfigReader.getInstance().getPathTables()+File.separator+tableName+"."+FILE_EXTENSION;
+			Map<Long,Long> indexMap = new TreeMap<Long,Long>();
+			FileWriter fr = null;
+			BufferedWriter br = null;
+			String indexFileName=tableName+"."+TABLE_INDEX_EXTENSION;
+			String indexFilePath=DBConfigReader.getInstance().getPathTables()+File.separator+indexFileName;
+			Scanner tableReader = null;
+			try {
+				createIndexFile(indexFilePath);
+				fr = new FileWriter(indexFilePath);
+				br = new BufferedWriter(fr);
+				tableReader = new Scanner(new File(tableNameFile));
+				tableReader.useDelimiter("\n");
+				while(tableReader.hasNext())
+				{
+					String lineReader = tableReader.next();
+					//TODO:Assuming the Index will be Long  Need to convert to String :)
+					//TODO:Assuming the first column is Index :)
+					indexMap.put(Long.parseLong(lineReader.split(",")[0]),offset);
+					offset+=lineReader.length()+1;
+
+				}
+
+
+
 				Iterator<Map.Entry<Long,Long>> entry = indexMap.entrySet().iterator();
 				while(entry.hasNext())
 				{
@@ -69,23 +74,23 @@ public class CreateIndex {
 					br.write(key.toString()+","+value.toString());
 					br.write(System.getProperty("line.separator"));
 				}
-				
+
 			} 
-			 catch (IOException e) {
-					
-					e.printStackTrace();
-				}
-		 finally
-		 {
-			 try {
-				br.close();
-				fr.close();
-				tableReader.close();
-			} catch (IOException e) {
+			catch (IOException e) {
+
 				e.printStackTrace();
 			}
-		 }
-				
+			finally
+			{
+				try {
+					br.close();
+					fr.close();
+					tableReader.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}	
 		}
 	
 	

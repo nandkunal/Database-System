@@ -58,7 +58,7 @@ public class TestQueryProcessor {
 	}
 	
 }
-	@Test
+	//@Test
     public void testSelectWhere() {
 	try {
 		queryObj.queryType("SELECT * FROM countries where ID=302622;");
@@ -100,12 +100,21 @@ public class TestQueryProcessor {
 }
 	//@Test
     public void testCreate() {
-	try {
-		queryObj.queryType("CREATE TABLE Persons(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));");
-	} catch (IOException e) {
-		// TODO Auto-generated catch block
-		e.printStackTrace();
-	}
-	
+    	try {
+    		queryObj.queryType("CREATE TABLE Persons(PersonID int,LastName varchar(255),FirstName varchar(255),Address varchar(255),City varchar(255));");
+    	} catch (IOException e) {
+    		// TODO Auto-generated catch block
+    		e.printStackTrace();
+    	}
 }
+    
+    @Test
+	public void testSimpleInnerJoin()
+	{
+		try {
+			queryObj.queryType("SELECT * from persons INNER JOIN countries ON persons.ID=countries.ID");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -16,6 +16,7 @@ public class TestMain {
 			queryObj.queryType("SELECT  * FROM countries;");
 			queryObj.queryType("SELECT * FROM countries where ID=302610;");
 			queryObj.queryType("SELECT NAME FROM countries;");
+			queryObj.queryType("SELECT * from persons INNER JOIN countries ON persons.ID=countries.ID");
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

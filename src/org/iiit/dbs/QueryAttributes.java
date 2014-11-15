@@ -13,6 +13,14 @@ public class QueryAttributes {
 	private String rightWhereExpValue;
 	private String whereClauseOperator;
 	private String havingStatement;
+	private String joinType;
+	private boolean hasJoins=false;
+	private String joinTables;
+	private String joinLeftTableName;
+	private String joinRightTableName;
+	private String joinLeftColumnName;
+	private String joinRightColumnName;
+	private String joinOperator;
 	
 	public List<String> getTableNames() {
 		return tableNames;
@@ -77,7 +85,56 @@ public class QueryAttributes {
 				+ ", leftWhereColumnName=" + leftWhereColumnName
 				+ ", rightWhereExpValue=" + rightWhereExpValue
 				+ ", whereClauseOperator=" + whereClauseOperator
-				+ ", havingStatement=" + havingStatement + "]";
+				+ ", havingStatement=" + havingStatement + ", joinType="
+				+ joinType + "]";
+	}
+	public String getJoinType() {
+		return joinType;
+	}
+	public void setJoinType(String joinType) {
+		this.joinType = joinType;
+	}
+	public boolean isHasJoins() {
+		return hasJoins;
+	}
+	public void setHasJoins(boolean hasJoins) {
+		this.hasJoins = hasJoins;
+	}
+	public String getJoinTables() {
+		return joinTables;
+	}
+	public void setJoinTables(String joinTables) {
+		this.joinTables = joinTables;
+	}
+	public String getJoinLeftTableName() {
+		return joinLeftTableName;
+	}
+	public void setJoinLeftTableName(String joinLeftTableName) {
+		this.joinLeftTableName = joinLeftTableName;
+	}
+	public String getJoinRightTableName() {
+		return joinRightTableName;
+	}
+	public void setJoinRightTableName(String joinRightTableName) {
+		this.joinRightTableName = joinRightTableName;
+	}
+	public String getJoinLeftColumnName() {
+		return joinLeftColumnName;
+	}
+	public void setJoinLeftColumnName(String joinLeftColumnName) {
+		this.joinLeftColumnName = joinLeftColumnName;
+	}
+	public String getJoinRightColumnName() {
+		return joinRightColumnName;
+	}
+	public void setJoinRightColumnName(String joinRightColumnName) {
+		this.joinRightColumnName = joinRightColumnName;
+	}
+	public String getJoinOperator() {
+		return joinOperator;
+	}
+	public void setJoinOperator(String joinOperator) {
+		this.joinOperator = joinOperator;
 	}
 	
 	

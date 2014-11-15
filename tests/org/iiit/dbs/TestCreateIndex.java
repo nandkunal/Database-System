@@ -16,7 +16,7 @@ public class TestCreateIndex {
 	@Test
 	public void testCreateIndex() throws TableNotFoundExecption, UnknownColumnException
 	{
-		CreateIndex index = new CreateIndex("countries", "ID");
+		CreateIndex index = new CreateIndex("persons", "ID");
 		index.readDataFileAndWriteToIndex();
 	}
 

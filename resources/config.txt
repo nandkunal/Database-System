@@ -8,3 +8,9 @@ CODE, String
 NAME, String
 CONTINENT, String
 END
+BEGIN
+persons
+ID, int
+COUNTRY_CODE, int
+NAME, String
+END

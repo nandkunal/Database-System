@@ -1,3 +1,5 @@
 1.Add Offset in Index Map -Completed
 2. Validation of where cols to attr type
 3.Index Files to be stored in tablemetadata
+4.Paging Algo Modification
+5.B+Indexing

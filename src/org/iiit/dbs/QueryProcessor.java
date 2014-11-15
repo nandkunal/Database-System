@@ -15,9 +15,12 @@ import net.sf.jsqlparser.expression.Parenthesis;
 import net.sf.jsqlparser.expression.operators.relational.EqualsTo;
 import net.sf.jsqlparser.parser.CCJSqlParserManager;
 import net.sf.jsqlparser.schema.Column;
+import net.sf.jsqlparser.schema.Table;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.create.table.ColumnDefinition;
 import net.sf.jsqlparser.statement.create.table.CreateTable;
+import net.sf.jsqlparser.statement.select.FromItem;
+import net.sf.jsqlparser.statement.select.Join;
 import net.sf.jsqlparser.statement.select.OrderByElement;
 import net.sf.jsqlparser.statement.select.PlainSelect;
 import net.sf.jsqlparser.statement.select.Select;
@@ -80,6 +83,41 @@ public class QueryProcessor {
 		List<String> tableList = tableFinder.getTableList(selectStmt);
 		attr.setTableNames(tableList);
 		PlainSelect plainSelect = (PlainSelect)selectStmt.getSelectBody();
+		if(plainSelect.getJoins()!=null && plainSelect.getJoins().size()>0){
+			attr.setHasJoins(true);
+			//TODO::Assuming that only one Join is in Query
+			Join join = (Join)plainSelect.getJoins().get(0);
+			if(join.isInner())
+			{
+				attr.setJoinType("Inner");
+			}
+			if(join.isOuter())
+			{
+				attr.setJoinType("Outer");
+			}
+			
+			FromItem joinItem = (FromItem)join.getRightItem();
+			Table joinTbl = (Table)joinItem;
+			attr.setJoinTables(joinTbl.getWholeTableName());
+			if(join.getOnExpression() instanceof EqualsTo)
+			{
+				EqualsTo oper =(EqualsTo)join.getOnExpression();
+				attr.setJoinOperator("EqualsTo");
+				if(oper.getLeftExpression()!=null)
+				{
+					Column leftCol=(Column)oper.getLeftExpression();
+					attr.setJoinLeftColumnName(leftCol.getColumnName());
+					attr.setJoinLeftTableName(leftCol.getTable().getName());
+				}
+				if(oper.getRightExpression()!=null)
+				{
+					Column rightCol=(Column)oper.getRightExpression();
+					attr.setJoinRightColumnName(rightCol.getColumnName());
+					attr.setJoinRightTableName(rightCol.getTable().getName());
+				}
+				
+			}
+		}
 		List selectElements = plainSelect.getSelectItems();
 		List<String>columnNames=new ArrayList<String>();
 		if(selectElements.get(0).toString().equalsIgnoreCase("*")){
@@ -176,7 +214,7 @@ public class QueryProcessor {
 			try {
 				queryExecutor.executeQuery();
 			} catch (UnknownColumnException e) {
-				e.printStackTrace();
+				System.out.println(e.getMessage());
 			}
 		} catch (TableNotFoundExecption e) {
 			System.out.println(e.getMessage());

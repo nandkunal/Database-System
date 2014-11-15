@@ -23,7 +23,13 @@ public class SelectQueryExecutor {
 			if(!Validator.isTableExists(tableName)){
 				throw new TableNotFoundExecption(tableName);
 			}
-			if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") && attributes.getLeftWhereColumnName()!=null
+			
+			if(attributes.isHasJoins())
+			{
+				displayRowsByJoinConditions();
+				break;//Added as Table Finder will list all Tables;
+			}
+			else if(attributes.getColumnNames().size()==1 && attributes.getColumnNames().get(0).equalsIgnoreCase("*") && attributes.getLeftWhereColumnName()!=null
 					&& attributes.getRightWhereExpValue()!=null)
 			{
 				displayAllRowsByWhereCondition(tableName,attributes.getLeftWhereColumnName(),attributes.getRightWhereExpValue(),attributes.getWhereClauseOperator());
@@ -38,6 +44,11 @@ public class SelectQueryExecutor {
 		}
 	}
 
+
+	private void displayRowsByJoinConditions() {
+		System.out.println("Evaluate by Sort Merge Joins");
+		
+	}
 
 	private void displayAllRowsByWhereCondition(String tableName,
 			String leftWhereColumnName, String rightWhereExpValue,String operator) throws UnknownColumnException, IOException {
