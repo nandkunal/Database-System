@@ -6,7 +6,7 @@ A sample project to implement  concepts learnt in  Database System Course.The ob
 Running from Eclipse
 ========================
 1.Import Project as General->Import Existing Workspace
-2.Run tests/org.iiit.dbs/TestDBSystem.java as Junit
+2.Run tests/org.iiit.dbs/TestQueryProcessor.java as Junit
 
 ======================================
 Running from command Line
